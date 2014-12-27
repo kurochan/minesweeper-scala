@@ -12,7 +12,6 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:$CoverallsVersion"
   }
 }
-cobertura.coverageFormats = ['html', 'xml']
 
 apply plugin: 'scala'
 apply plugin:'application'
@@ -22,6 +21,7 @@ apply plugin: 'com.github.kt3k.coveralls'
 targetCompatibility = 1.7
 sourceCompatibility = 1.7
 mainClassName = "minesweeper.Main"
+cobertura.coverageFormats = ['html', 'xml']
 
 repositories {
   jcenter()
