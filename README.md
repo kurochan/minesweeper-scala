@@ -1,6 +1,7 @@
 Minesweeper-Scala
 ==================
 [![Build Status](https://travis-ci.org/kurochan/minesweeper-scala.svg?branch=master)](https://travis-ci.org/kurochan/minesweeper-scala)
+[![Coverage Status](https://coveralls.io/repos/kurochan/minesweeper-scala/badge.png)](https://coveralls.io/r/kurochan/minesweeper-scala)
 
 ScalaでMinesweeperを作ってみました
 
