@@ -5,3 +5,6 @@
 # gradle specific
 .gradle
 build/
+
+# specs2 specific
+target/

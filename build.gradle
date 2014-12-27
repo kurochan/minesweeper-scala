@@ -22,6 +22,7 @@ targetCompatibility = 1.7
 sourceCompatibility = 1.7
 mainClassName = "minesweeper.Main"
 cobertura.coverageFormats = ['html', 'xml']
+cobertura.coverageSourceDirs = sourceSets.main.scala.srcDirs
 
 repositories {
   jcenter()
@@ -31,10 +32,12 @@ repositories {
 ext {
   scalaVersion = '2.11'
   scalaVersionRevision = '4'
+  specs2Version = '2.4.2'
 }
 
 dependencies {
   compile "org.scala-lang:scala-library:$scalaVersion.$scalaVersionRevision"
+  testCompile "org.specs2:specs2_$scalaVersion:$specs2Version"
 }
 
 tasks.withType(ScalaCompile) {
