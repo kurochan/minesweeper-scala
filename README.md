@@ -1,5 +1,6 @@
 Minesweeper-Scala
 ==================
+[![Build Status](https://travis-ci.org/kurochan/minesweeper-scala.svg?branch=master)](https://travis-ci.org/kurochan/minesweeper-scala)
 
 ScalaでMinesweeperを作ってみました
 
