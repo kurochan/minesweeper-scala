@@ -1,5 +1,22 @@
+buildscript {
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  ext {
+    CoberturaVersion = '2.0.0'
+    CoverallsVersion = '2.0.1'
+  }
+  dependencies {
+    classpath "net.saliman:gradle-cobertura-plugin:$CoberturaVersion"
+    classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:$CoverallsVersion"
+  }
+}
+
 apply plugin: 'scala'
 apply plugin:'application'
+apply plugin: 'cobertura'
+apply plugin: 'com.github.kt3k.coveralls'
 
 targetCompatibility = 1.7
 sourceCompatibility = 1.7
@@ -7,6 +24,7 @@ mainClassName = "minesweeper.Main"
 
 repositories {
   jcenter()
+  mavenCentral()
 }
 
 ext {
@@ -17,6 +35,7 @@ ext {
 dependencies {
   compile "org.scala-lang:scala-library:$scalaVersion.$scalaVersionRevision"
 }
+cobertura.coverageFormats = ['html', 'xml']
 
 tasks.withType(ScalaCompile) {
   scalaCompileOptions.useAnt = false
