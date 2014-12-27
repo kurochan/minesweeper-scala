@@ -12,6 +12,7 @@ buildscript {
     classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:$CoverallsVersion"
   }
 }
+cobertura.coverageFormats = ['html', 'xml']
 
 apply plugin: 'scala'
 apply plugin:'application'
@@ -35,7 +36,6 @@ ext {
 dependencies {
   compile "org.scala-lang:scala-library:$scalaVersion.$scalaVersionRevision"
 }
-cobertura.coverageFormats = ['html', 'xml']
 
 tasks.withType(ScalaCompile) {
   scalaCompileOptions.useAnt = false
