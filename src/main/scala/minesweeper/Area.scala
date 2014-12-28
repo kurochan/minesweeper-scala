@@ -6,7 +6,7 @@ abstract class Area(ms: Minesweeper, row: Int, col: Int) {
     val nextRow = row + move._1
     val nextCol = col + move._2
     if (nextRow >= 0 && nextRow < ms.sizeRow && nextCol >= 0 && nextCol < ms.sizeCol)
-      ms.field(nextRow)(nextCol) match {
+      ms(nextRow)(nextCol) match {
         case _: MineArea => sum + 1
         case _ => sum
       }
