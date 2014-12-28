@@ -14,6 +14,9 @@ abstract class Area(ms: Minesweeper, row: Int, col: Int) {
       }
     else sum
   })
+
+  var flag = false
+  var open = false
 }
 
 case class NormalArea(ms: Minesweeper, row: Int, col: Int)
