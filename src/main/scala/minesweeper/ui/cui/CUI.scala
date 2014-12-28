@@ -1,9 +1,9 @@
 package minesweeper.ui.cui
 
 import scala.annotation.tailrec
-import minesweeper.Minesweeper
+import minesweeper.{Minesweeper, Area, MineArea}
 
-class CUI(ms: Minesweeper) {
+case class CUI(ms: Minesweeper) {
   val colNames:Seq[String] = {
     @tailrec
     def mkCode(seq: Seq[Int], quot: Int): Seq[Int] = {
@@ -33,7 +33,12 @@ class CUI(ms: Minesweeper) {
     for(row <- 0 to ms.sizeRow - 1) {
       print(row + " " * (rowNameWidth - row.toString.size))
       for(col <- 0 to ms.sizeCol - 1) {
-        print(ms(row)(col).mineCount + " " * (colNameWidth - 1))
+        val area = ms(row)(col)
+        val mark = area match {
+          case _: MineArea => "x"
+          case _ => area.mineCount.toString
+        }
+        print(mark + " " * (colNameWidth - 1))
       }
       println
     }
