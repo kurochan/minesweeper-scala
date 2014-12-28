@@ -3,7 +3,7 @@ package minesweeper.ui.cui
 import scala.annotation.tailrec
 import minesweeper.Minesweeper
 
-class CUI(ms: Minesweeper) {
+case class CUI(ms: Minesweeper) {
   val colNames:Seq[String] = {
     @tailrec
     def mkCode(seq: Seq[Int], quot: Int): Seq[Int] = {
