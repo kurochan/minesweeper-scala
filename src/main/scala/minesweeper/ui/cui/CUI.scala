@@ -26,10 +26,10 @@ case class CUI(ms: Minesweeper) {
   lazy val colNameWidth = colNames.last.size + 1
 
   def attach() {
-    printField
+    printField()
   }
 
-  def printField() {
+  def printField(debug: Boolean = false) {
     print(" " * rowNameWidth)
     colNames.foreach(name => print(name + " " * (colNameWidth - name.size)))
     println
@@ -38,9 +38,15 @@ case class CUI(ms: Minesweeper) {
       print(row + " " * (rowNameWidth - row.toString.size))
       for(col <- 0 to ms.sizeCol - 1) {
         val area = ms(row)(col)
-        val mark = area match {
-          case _: MineArea => "x"
-          case _ => area.mineCount.toString
+        val mark = area.flag match {
+          case true => "*"
+          case false => (area.open || debug) match {
+            case true => area match {
+              case _: MineArea => "x"
+              case _ => area.mineCount.toString
+            }
+            case false => "?"
+          }
         }
         print(mark + " " * (colNameWidth - 1))
       }
