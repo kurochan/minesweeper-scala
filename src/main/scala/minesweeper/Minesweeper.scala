@@ -11,29 +11,33 @@ sealed abstract class Minesweeper() {
 
 object Minesweeper {
 
+  def initMines(size: Int, mineNum: Int): Set[Int] =
+    Random.shuffle(0 to size - 1).slice(0, mineNum).toSet
+
   def apply(sizeRow: Int, sizeCol: Int, mineNum: Int) = {
-    new Playing(sizeRow, sizeCol, mineNum)
+    new Playing(sizeRow, sizeCol, initMines(sizeRow * sizeCol, mineNum))
   }
 }
 
-class Playing(val sizeRow: Int, val sizeCol: Int, mineNum: Int) extends
-  Minesweeper {
+class Playing(val sizeRow: Int, val sizeCol: Int,
+  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends Minesweeper {
 
-  private val mines: Set[Int] =
-    Random.shuffle(0 to sizeRow * sizeCol - 1).slice(0, mineNum).toSet
+  private val field: Seq[Seq[Area]] = prevField match {
+    case Some(field) =>
+      field.map(_.map(area => NormalArea(this, area.row, area.col)))
 
-  private val field: Seq[Seq[Area]] = (0 to sizeRow - 1).map(
-    row => (0 to sizeCol - 1).map(col =>
-      if (mines(row * sizeCol + col)) MineArea(this, row, col) else NormalArea(this, row, col)))
+    case None => (0 to sizeRow - 1).map(
+      row => (0 to sizeCol - 1).map(col => if (mines(row * sizeCol + col))
+        new MineArea(this, row, col) else new NormalArea(this, row, col)))
+  }
 
   def apply(row: Int)(col: Int): Area = field(row)(col)
 }
 
-class Cleared(ms: Minesweeper) extends Minesweeper {
-  val sizeRow = ms.sizeRow
-  val sizeCol = ms.sizeRow
+class Cleared(override val sizeRow: Int, override val sizeCol: Int,
+  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends
+    Playing(sizeRow: Int, sizeCol: Int, mines: Set[Int], prevField: Option[Seq[Seq[Area]]])
 
-  def apply(row: Int)(col: Int): Area = ms(row)(col)
-}
-
-class Dead(ms: Playing) extends Cleared(ms: Playing)
+class Dead(override val sizeRow: Int, override val sizeCol: Int,
+  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends
+    Playing(sizeRow: Int, sizeCol: Int, mines: Set[Int], prevField: Option[Seq[Seq[Area]]])
