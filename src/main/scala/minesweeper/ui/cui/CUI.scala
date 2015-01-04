@@ -1,5 +1,6 @@
 package minesweeper.ui.cui
 
+import java.util.Scanner
 import scala.annotation.tailrec
 import minesweeper.{Minesweeper, Area, MineArea}
 
@@ -26,10 +27,19 @@ case class CUI(ms: Minesweeper) {
   lazy val colNameWidth = colNames.last.size + 1
 
   def attach() {
-    printField()
+    val sc = new java.util.Scanner(System.in)
+    @tailrec
+    def loop(ms: Minesweeper) {
+      printField(ms)
+      println
+      println("Select field (row col)")
+      val row, col = sc.nextInt
+      loop(ms(row)(col).open)
+    }
+    loop(ms)
   }
 
-  def printField(debug: Boolean = false) {
+  def printField(ms: Minesweeper, debug: Boolean = false) {
     print(" " * rowNameWidth)
     colNames.foreach(name => print(name + " " * (colNameWidth - name.size)))
     println
@@ -38,7 +48,7 @@ case class CUI(ms: Minesweeper) {
       print(row + " " * (rowNameWidth - row.toString.size))
       for(col <- 0 to ms.sizeCol - 1) {
         val area = ms(row)(col)
-        val mark = (area.open || debug) match {
+        val mark = (area.isOpen || debug) match {
           case true => area match {
             case _: MineArea => "x"
             case _ => area.mineCount.toString
