@@ -16,7 +16,7 @@ object Minesweeper {
   def initMines(size: Int, mineNum: Int): Set[Int] =
     Random.shuffle(0 to size - 1).slice(0, mineNum).toSet
 
-  def apply(sizeRow: Int, sizeCol: Int, mineNum: Int) = {
+  def apply(sizeRow: Int, sizeCol: Int, mineNum: Int): Minesweeper = {
     new Playing(sizeRow, sizeCol, 0, initMines(sizeRow * sizeCol, mineNum))
   }
 }
@@ -26,7 +26,10 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
 
   private val field: Seq[Seq[Area]] = Option(prevField) match {
     case Some(field) =>
-      field.map(_.map(area => NormalArea(this, area.row, area.col)))
+      field.map(_.map(_ match {
+        case area: MineArea => MineArea(this, area.row, area.col)
+        case area => NormalArea(this, area.row, area.col)
+      }))
 
     case None => (0 to sizeRow - 1).map(
       row => (0 to sizeCol - 1).map(col => if (mines(row * sizeCol + col))
