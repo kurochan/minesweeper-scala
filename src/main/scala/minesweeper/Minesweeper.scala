@@ -27,8 +27,8 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
   private val field: Seq[Seq[Area]] = Option(prevField) match {
     case Some(field) =>
       field.map(_.map(_ match {
-        case area: MineArea => MineArea(this, area.row, area.col)
-        case area => NormalArea(this, area.row, area.col)
+        case area: MineArea => MineArea(this, area.row, area.col, area.flag, area.open)
+        case area => NormalArea(this, area.row, area.col, area.flag, area.open)
       }))
 
     case None => (0 to sizeRow - 1).map(

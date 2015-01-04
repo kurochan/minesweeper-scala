@@ -1,6 +1,8 @@
 package minesweeper
 
-abstract class Area(ms: Minesweeper, val row: Int, val col: Int) {
+abstract class Area(ms: Minesweeper,
+  val row: Int, val col: Int,
+  val flag: Boolean = false, val open: Boolean = false) {
 
   private val movePattern = Seq((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1))
 
@@ -14,13 +16,14 @@ abstract class Area(ms: Minesweeper, val row: Int, val col: Int) {
       }
     else sum
   })
-
-  var flag = false
-  var open = false
 }
 
-case class NormalArea(ms: Minesweeper, override val row: Int, override val col: Int)
-  extends Area(ms: Minesweeper, row: Int, col: Int)
+case class NormalArea(ms: Minesweeper,
+  override val row: Int, override val col: Int,
+  override val flag: Boolean = false, override val open: Boolean = false)
+    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, open: Boolean)
 
-case class MineArea(ms: Minesweeper, override val row: Int, override val col: Int)
-  extends Area(ms: Minesweeper, row: Int, col: Int)
+case class MineArea(ms: Minesweeper,
+  override val row: Int, override val col: Int,
+  override val flag: Boolean = false, override val open: Boolean = false)
+    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, open: Boolean)
