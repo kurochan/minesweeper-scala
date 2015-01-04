@@ -8,7 +8,7 @@ sealed abstract class Minesweeper() {
   val sizeCol: Int
   val countOpen: Int
   def apply(row: Int)(col: Int): Area
-  def update(row: Int, col: Int, area: Area): Minesweeper
+  def update(area: Area): Minesweeper
 }
 
 object Minesweeper {
@@ -27,8 +27,8 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
   private val field: Seq[Seq[Area]] = Option(prevField) match {
     case Some(field) =>
       field.map(_.map(_ match {
-        case area: MineArea => MineArea(this, area.row, area.col, area.flag, area.isOpen)
-        case area => NormalArea(this, area.row, area.col, area.flag, area.isOpen)
+        case area: MineArea => new MineArea(this, area.row, area.col, area.flag, area.isOpen)
+        case area => new NormalArea(this, area.row, area.col, area.flag, area.isOpen)
       }))
 
     case None => (0 to sizeRow - 1).map(
@@ -38,8 +38,8 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
 
   def apply(row: Int)(col: Int): Area = field(row)(col)
 
-  def update(row: Int, col: Int, area: Area): Minesweeper = {
-    val newField = field.updated(row, field(row).updated(col, area))
+  def update(area: Area): Minesweeper = {
+    val newField = field.updated(area.row, field(area.row).updated(area.col, area))
     new Playing(sizeRow, sizeCol, countOpen, mines, newField)
   }
 }

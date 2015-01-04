@@ -16,14 +16,26 @@ abstract class Area(ms: Minesweeper,
       }
     else sum
   })
+
+  def open(): Minesweeper
 }
 
-case class NormalArea(ms: Minesweeper,
+class NormalArea(ms: Minesweeper,
   override val row: Int, override val col: Int,
   override val flag: Boolean = false, override val isOpen: Boolean = false)
-    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean)
+    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean) {
 
-case class MineArea(ms: Minesweeper,
+  def open(): Minesweeper = {
+    ms.update(new NormalArea(null, row, col, flag, true))
+  }
+}
+
+class MineArea(ms: Minesweeper,
   override val row: Int, override val col: Int,
   override val flag: Boolean = false, override val isOpen: Boolean = false)
-    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean)
+    extends NormalArea(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean) {
+
+  override def open() : Minesweeper = {
+    ms.update(new MineArea(null, row, col, flag, true))
+  }
+}
