@@ -8,6 +8,7 @@ sealed abstract class Minesweeper() {
   val sizeCol: Int
   val countOpen: Int
   def apply(row: Int)(col: Int): Area
+  def update(row: Int, col: Int, area: Area): Minesweeper
 }
 
 object Minesweeper {
@@ -21,9 +22,9 @@ object Minesweeper {
 }
 
 class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
-  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends Minesweeper {
+  mines: Set[Int], prevField: Seq[Seq[Area]] = null) extends Minesweeper {
 
-  private val field: Seq[Seq[Area]] = prevField match {
+  private val field: Seq[Seq[Area]] = Option(prevField) match {
     case Some(field) =>
       field.map(_.map(area => NormalArea(this, area.row, area.col)))
 
@@ -33,12 +34,17 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
   }
 
   def apply(row: Int)(col: Int): Area = field(row)(col)
+
+  def update(row: Int, col: Int, area: Area): Minesweeper = {
+    val newField = field.updated(row, field(row).updated(col, area))
+    new Playing(sizeRow, sizeCol, countOpen, mines, newField)
+  }
 }
 
 class Cleared(override val sizeRow: Int, override val sizeCol: Int, countOpen: Int,
-  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends
-    Playing(sizeRow: Int, sizeCol: Int, countOpen: Int, mines: Set[Int], prevField: Option[Seq[Seq[Area]]])
+  mines: Set[Int], prevField: Seq[Seq[Area]] = null) extends
+    Playing(sizeRow: Int, sizeCol: Int, countOpen: Int, mines: Set[Int], prevField: Seq[Seq[Area]])
 
 class Dead(override val sizeRow: Int, override val sizeCol: Int, countOpen: Int,
-  mines: Set[Int], prevField: Option[Seq[Seq[Area]]] = None) extends
-    Playing(sizeRow: Int, sizeCol: Int, countOpen: Int, mines: Set[Int], prevField: Option[Seq[Seq[Area]]])
+  mines: Set[Int], prevField: Seq[Seq[Area]] = null) extends
+    Playing(sizeRow: Int, sizeCol: Int, countOpen: Int, mines: Set[Int], prevField: Seq[Seq[Area]])
