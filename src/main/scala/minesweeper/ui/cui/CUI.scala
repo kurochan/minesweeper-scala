@@ -38,13 +38,13 @@ case class CUI(ms: Minesweeper) {
       print(row + " " * (rowNameWidth - row.toString.size))
       for(col <- 0 to ms.sizeCol - 1) {
         val area = ms(row)(col)
-        val mark = area.flag match {
-          case true => "*"
-          case false => (area.open || debug) match {
-            case true => area match {
-              case _: MineArea => "x"
-              case _ => area.mineCount.toString
-            }
+        val mark = (area.open || debug) match {
+          case true => area match {
+            case _: MineArea => "x"
+            case _ => area.mineCount.toString
+          }
+          case false => area.flag match {
+            case true => "*"
             case false => "?"
           }
         }
