@@ -43,3 +43,7 @@ dependencies {
 tasks.withType(ScalaCompile) {
   scalaCompileOptions.useAnt = false
 }
+
+run {
+  standardInput = System.in
+}
