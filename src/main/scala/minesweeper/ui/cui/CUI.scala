@@ -30,6 +30,7 @@ case class CUI(ms: Minesweeper) {
     val sc = new java.util.Scanner(System.in)
     @tailrec
     def loop(ms: Minesweeper) {
+      println
       printField(ms)
       println
       println("Select field (row col)")
