@@ -1,6 +1,7 @@
 package minesweeper.ui.cui
 
 import java.util.Scanner
+import scala.Console._
 import scala.annotation.tailrec
 import minesweeper.{Minesweeper, Cleared, Dead, Area, MineArea}
 
@@ -36,17 +37,17 @@ case class CUI(ms: Minesweeper) {
 
       ms match {
         case _: Cleared => {
-          println("Cleared!")
-          println
+          println(GREEN_B + "   Cleared!   ")
+          println(RESET)
           printField(ms, true)
         }
         case _: Dead => {
-          println("Dead!")
-          println
+          println(RED_B + "   Dead!   ")
+          println(RESET)
           printField(ms, true)
         }
         case _ => {
-          println("Select field (row col)")
+          print("Select field (row col): ")
           val row, col = sc.nextInt
           loop(ms(row)(col).open)
         }
@@ -57,17 +58,18 @@ case class CUI(ms: Minesweeper) {
 
   def printField(ms: Minesweeper, debug: Boolean = false) {
     print(" " * rowNameWidth)
+    print(BOLD)
     colNames.foreach(name => print(name + " " * (colNameWidth - name.size)))
-    println
+    println(RESET)
 
     for(row <- 0 to ms.sizeRow - 1) {
-      print(row + " " * (rowNameWidth - row.toString.size))
+      print(BOLD + row + " " * (rowNameWidth - row.toString.size) + RESET)
       for(col <- 0 to ms.sizeCol - 1) {
         val area = ms(row)(col)
         val mark = (area.isOpen || debug) match {
           case true => area match {
-            case _: MineArea => "x"
-            case _ => area.mineCount.toString
+            case _: MineArea => BLINK + "x" + RESET
+            case _ => CYAN + area.mineCount.toString + RESET
           }
           case false => area.flag match {
             case true => "*"
