@@ -37,9 +37,13 @@ case class CUI(ms: Minesweeper) {
       ms match {
         case _: Cleared => {
           println("Cleared!")
+          println
+          printField(ms, true)
         }
         case _: Dead => {
           println("Dead!")
+          println
+          printField(ms, true)
         }
         case _ => {
           println("Select field (row col)")
