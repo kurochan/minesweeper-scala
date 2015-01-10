@@ -1,6 +1,7 @@
 package minesweeper.ui.cui
 
 import java.util.Scanner
+import java.util.InputMismatchException
 import scala.Console._
 import scala.annotation.tailrec
 import minesweeper.{Minesweeper, Cleared, Dead, Area, MineArea}
@@ -48,12 +49,22 @@ case class CUI(ms: Minesweeper) {
         }
         case _ => {
           print("Select field (e.g \'a 0\'): ")
-          val col = colNames.indexOf(sc.next)
-          val row = sc.nextInt
+          val pos = try {
+            val col = colNames.indexOf(sc.next)
+            val row = sc.nextInt
+            if (row < 0 || row >= ms.sizeRow)
+              throw new InputMismatchException("Invalid Column Name")
+            (row, col)
+          } catch {
+            case e: InputMismatchException => {
+              (-1, -1)
+            }
+          }
+
           print("open/check [o/c]: ")
           sc.next match {
-            case "o" => loop(ms(row)(col).open)
-            case "c" => loop(ms(row)(col).check)
+            case "o" if pos._2 >= 0 => loop(ms(pos._1)(pos._2).open)
+            case "c" if pos._2 >= 0 => loop(ms(pos._1)(pos._2).check)
             case _ => {
               println(RED + "Unknown Command" + RESET)
               loop(ms)
