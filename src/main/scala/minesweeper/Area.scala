@@ -4,7 +4,9 @@ abstract class Area(ms: Minesweeper,
   val row: Int, val col: Int,
   val flag: Boolean = false, val isOpen: Boolean = false) {
 
-  private val movePattern = Seq((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1))
+  private val movePattern = Seq((-1, -1), (-1, 0), (-1, 1),
+                                ( 0, -1),          ( 0, 1),
+                                ( 1, -1), ( 1, 0), ( 1, 1))
 
   lazy val mineCount: Int = movePattern.foldLeft(0)((sum, move) => {
     val nextRow = row + move._1
