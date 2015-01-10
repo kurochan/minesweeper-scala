@@ -2,7 +2,7 @@ package minesweeper.ui.cui
 
 import java.util.Scanner
 import scala.annotation.tailrec
-import minesweeper.{Minesweeper, Area, MineArea}
+import minesweeper.{Minesweeper, Cleared, Dead, Area, MineArea}
 
 case class CUI(ms: Minesweeper) {
 
@@ -33,9 +33,21 @@ case class CUI(ms: Minesweeper) {
       println
       printField(ms)
       println
-      println("Select field (row col)")
-      val row, col = sc.nextInt
-      loop(ms(row)(col).open)
+
+      println(ms)
+      ms match {
+        case _: Cleared => {
+          println("Cleared!")
+        }
+        case _: Dead => {
+          println("Dead!")
+        }
+        case _ => {
+          println("Select field (row col)")
+          val row, col = sc.nextInt
+          loop(ms(row)(col).open)
+        }
+      }
     }
     loop(ms)
   }
