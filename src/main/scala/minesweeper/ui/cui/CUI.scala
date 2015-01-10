@@ -34,7 +34,6 @@ case class CUI(ms: Minesweeper) {
       printField(ms)
       println
 
-      println(ms)
       ms match {
         case _: Cleared => {
           println("Cleared!")
