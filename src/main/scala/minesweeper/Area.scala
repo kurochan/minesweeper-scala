@@ -33,7 +33,7 @@ class NormalArea(ms: Minesweeper,
   }
 
   def check(): Minesweeper = {
-    ms.update(update(row, col, true, isOpen))
+    ms.update(update(row, col, !flag, isOpen))
   }
 
   def update(row: Int, col: Int, flag: Boolean, isOpen: Boolean): Area =
