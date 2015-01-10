@@ -47,9 +47,10 @@ case class CUI(ms: Minesweeper) {
           printField(ms, true)
         }
         case _ => {
-          print("Select field (row col): ")
-          val row, col = sc.nextInt
-          print("open/check [o,c]: ")
+          print("Select field (e.g \'a 0\'): ")
+          val col = colNames.indexOf(sc.next)
+          val row = sc.nextInt
+          print("open/check [o/c]: ")
           sc.next match {
             case "o" => loop(ms(row)(col).open)
             case "c" => loop(ms(row)(col).check)
@@ -90,4 +91,3 @@ case class CUI(ms: Minesweeper) {
     }
   }
 }
-
