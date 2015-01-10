@@ -80,7 +80,7 @@ case class CUI(ms: Minesweeper) {
             case _ => CYAN + area.mineCount.toString + RESET
           }
           case false => area.flag match {
-            case true => "*"
+            case true => YELLOW + "*" + RESET
             case false => "?"
           }
         }
