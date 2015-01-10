@@ -1,7 +1,9 @@
 package minesweeper.ui.cui
 
+import java.util.Scanner
+import scala.Console._
 import scala.annotation.tailrec
-import minesweeper.{Minesweeper, Area, MineArea}
+import minesweeper.{Minesweeper, Cleared, Dead, Area, MineArea}
 
 case class CUI(ms: Minesweeper) {
 
@@ -26,25 +28,59 @@ case class CUI(ms: Minesweeper) {
   lazy val colNameWidth = colNames.last.size + 1
 
   def attach() {
-    printField()
+    val sc = new java.util.Scanner(System.in)
+    @tailrec
+    def loop(ms: Minesweeper) {
+      println
+      printField(ms)
+      println
+
+      ms match {
+        case _: Cleared => {
+          println(GREEN_B + "   Cleared!   ")
+          println(RESET)
+          printField(ms, true)
+        }
+        case _: Dead => {
+          println(RED_B + "   Dead!   ")
+          println(RESET)
+          printField(ms, true)
+        }
+        case _ => {
+          print("Select field (row col): ")
+          val row, col = sc.nextInt
+          print("open/check [o,c]: ")
+          sc.next match {
+            case "o" => loop(ms(row)(col).open)
+            case "c" => loop(ms(row)(col).check)
+            case _ => {
+              println(RED + "Unknown Command" + RESET)
+              loop(ms)
+            }
+          }
+        }
+      }
+    }
+    loop(ms)
   }
 
-  def printField(debug: Boolean = false) {
+  def printField(ms: Minesweeper, debug: Boolean = false) {
     print(" " * rowNameWidth)
+    print(BOLD)
     colNames.foreach(name => print(name + " " * (colNameWidth - name.size)))
-    println
+    println(RESET)
 
     for(row <- 0 to ms.sizeRow - 1) {
-      print(row + " " * (rowNameWidth - row.toString.size))
+      print(BOLD + row + " " * (rowNameWidth - row.toString.size) + RESET)
       for(col <- 0 to ms.sizeCol - 1) {
         val area = ms(row)(col)
-        val mark = area.flag match {
-          case true => "*"
-          case false => (area.open || debug) match {
-            case true => area match {
-              case _: MineArea => "x"
-              case _ => area.mineCount.toString
-            }
+        val mark = (area.isOpen || debug) match {
+          case true => area match {
+            case _: MineArea => BLINK + "x" + RESET
+            case _ => CYAN + area.mineCount.toString + RESET
+          }
+          case false => area.flag match {
+            case true => YELLOW + "*" + RESET
             case false => "?"
           }
         }

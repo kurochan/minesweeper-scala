@@ -1,8 +1,12 @@
 package minesweeper
 
-abstract class Area(ms: Minesweeper, row: Int, col: Int) {
+abstract class Area(ms: Minesweeper,
+  val row: Int, val col: Int,
+  val flag: Boolean = false, val isOpen: Boolean = false) {
 
-  private val movePattern = Seq((0, 0), (-1, 0), (1, 0), (0, -1), (0, 1))
+  private val movePattern = Seq((-1, -1), (-1, 0), (-1, 1),
+                                ( 0, -1),          ( 0, 1),
+                                ( 1, -1), ( 1, 0), ( 1, 1))
 
   lazy val mineCount: Int = movePattern.foldLeft(0)((sum, move) => {
     val nextRow = row + move._1
@@ -15,12 +19,32 @@ abstract class Area(ms: Minesweeper, row: Int, col: Int) {
     else sum
   })
 
-  var flag = false
-  var open = false
+  def open(): Minesweeper
+  def check(): Minesweeper
 }
 
-case class NormalArea(ms: Minesweeper, row: Int, col: Int)
-  extends Area(ms: Minesweeper, row: Int, col: Int)
+class NormalArea(ms: Minesweeper,
+  override val row: Int, override val col: Int,
+  override val flag: Boolean = false, override val isOpen: Boolean = false)
+    extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean) {
 
-case class MineArea(ms: Minesweeper, row: Int, col: Int)
-  extends Area(ms: Minesweeper, row: Int, col: Int)
+  def open(): Minesweeper = {
+    ms.update(update(row, col, flag, true))
+  }
+
+  def check(): Minesweeper = {
+    ms.update(update(row, col, true, isOpen))
+  }
+
+  def update(row: Int, col: Int, flag: Boolean, isOpen: Boolean): Area =
+    new NormalArea(null, row, col, flag, isOpen)
+}
+
+class MineArea(ms: Minesweeper,
+  override val row: Int, override val col: Int,
+  override val flag: Boolean = false, override val isOpen: Boolean = false)
+    extends NormalArea(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean) {
+
+  override def update(row: Int, col: Int, flag: Boolean, isOpen: Boolean): Area =
+    new MineArea(null, row, col, flag, isOpen)
+}
