@@ -49,7 +49,15 @@ case class CUI(ms: Minesweeper) {
         case _ => {
           print("Select field (row col): ")
           val row, col = sc.nextInt
-          loop(ms(row)(col).open)
+          print("open/check [o,c]: ")
+          sc.next match {
+            case "o" => loop(ms(row)(col).open)
+            case "c" => loop(ms(row)(col).check)
+            case _ => {
+              println(RED + "Unknown Command" + RESET)
+              loop(ms)
+            }
+          }
         }
       }
     }
