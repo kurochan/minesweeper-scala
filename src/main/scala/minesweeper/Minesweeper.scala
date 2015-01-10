@@ -40,11 +40,14 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
 
   def update(area: Area): Minesweeper = {
     val newField = field.updated(area.row, field(area.row).updated(area.col, area))
+    val newCount = if (!this(area.row)(area.col).isOpen && area.isOpen)
+      countOpen + 1 else countOpen
+
     area match {
-      case _: MineArea => new Dead(sizeRow, sizeCol, countOpen, mines, newField)
-      case _ if countOpen >= sizeRow * sizeCol =>
-        new Cleared(sizeRow, sizeCol, countOpen, mines, newField)
-      case _ => new Playing(sizeRow, sizeCol, countOpen, mines, newField)
+      case _: MineArea => new Dead(sizeRow, sizeCol, newCount, mines, newField)
+      case _ if newCount + mines.size >= sizeRow * sizeCol =>
+        new Cleared(sizeRow, sizeCol, newCount, mines, newField)
+      case _ => new Playing(sizeRow, sizeCol, newCount, mines, newField)
     }
   }
 }
