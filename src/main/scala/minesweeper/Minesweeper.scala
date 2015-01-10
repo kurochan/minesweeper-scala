@@ -44,7 +44,7 @@ class Playing(val sizeRow: Int, val sizeCol: Int, val countOpen: Int,
       countOpen + 1 else countOpen
 
     area match {
-      case _: MineArea => new Dead(sizeRow, sizeCol, newCount, mines, newField)
+      case _: MineArea if area.isOpen => new Dead(sizeRow, sizeCol, newCount, mines, newField)
       case _ if newCount + mines.size >= sizeRow * sizeCol =>
         new Cleared(sizeRow, sizeCol, newCount, mines, newField)
       case _ => new Playing(sizeRow, sizeCol, newCount, mines, newField)
