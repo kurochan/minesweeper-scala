@@ -9,7 +9,14 @@ ScalaでMinesweeperを作ってみました
 
 ## 遊び方
 
-TODO: Write usage instructions here
+```
+$ bin/minesweeper-scala [row] [col] [mines]
+```
+
+例
+```
+$ bin/minesweeper-scala 7 5 5
+```
 
 ## Contributing
 
