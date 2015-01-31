@@ -38,12 +38,12 @@ case class CUI(ms: Minesweeper) {
 
       ms match {
         case _: Cleared => {
-          println(GREEN_B + "   Cleared!   ")
+          print(GREEN_B + "   Cleared!   ")
           println(RESET)
           printField(ms, true)
         }
         case _: Dead => {
-          println(RED_B + "   Dead!   ")
+          print(RED_B + "   Dead!   ")
           println(RESET)
           printField(ms, true)
         }
