@@ -4,9 +4,9 @@ abstract class Area(ms: Minesweeper,
   val row: Int, val col: Int,
   val flag: Boolean = false, val isOpen: Boolean = false) {
 
-  private val movePattern = Seq((-1, -1), (-1, 0), (-1, 1),
-                                ( 0, -1),          ( 0, 1),
-                                ( 1, -1), ( 1, 0), ( 1, 1))
+  val movePattern = Seq((-1, -1), (-1, 0), (-1, 1),
+                        ( 0, -1), ( 0, 0), ( 0, 1),
+                        ( 1, -1), ( 1, 0), ( 1, 1))
 
   lazy val mineCount: Int = movePattern.foldLeft(0)((sum, move) => {
     val nextRow = row + move._1
@@ -28,8 +28,19 @@ class NormalArea(ms: Minesweeper,
   override val flag: Boolean = false, override val isOpen: Boolean = false)
     extends Area(ms: Minesweeper, row: Int, col: Int, flag: Boolean, isOpen: Boolean) {
 
-  def open(): Minesweeper = {
-    if (flag) ms else ms.update(update(row, col, flag, true))
+  def open(): Minesweeper = (flag || isOpen) match {
+    case true => ms
+    case false => mineCount match {
+      case 0 => movePattern.foldLeft(ms.update(update(row, col, flag, true)))(
+        (ms, move) => {
+          val nextRow = row + move._1
+          val nextCol = col + move._2
+          if (nextRow >= 0 && nextRow < ms.sizeRow &&nextCol >= 0 && nextCol < ms.sizeCol)
+            ms(nextRow)(nextCol).open
+          else ms
+        })
+      case _ => ms.update(update(row, col, flag, true))
+    }
   }
 
   def check(): Minesweeper = {
